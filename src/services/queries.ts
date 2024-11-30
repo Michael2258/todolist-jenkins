@@ -1,4 +1,0 @@
-export const QUERY_KEY = {
-  GET_NOTES: "GET_NOTES",
-  GET_NOTE_DETAILS: "GET_NOTE_DETAILS",
-};
