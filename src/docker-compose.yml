@@ -1,0 +1,6 @@
+services:
+  app:
+    image: learn-jenkins/todo-list:v1.0
+    ports:
+      - "2258:80"
+    restart: unless-stopped
