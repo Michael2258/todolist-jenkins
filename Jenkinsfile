@@ -15,7 +15,7 @@ pipeline {
         stage("Build image") {
             steps {
                 script {
-                    app = docker.build(${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION})
+                    app = docker.build("${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}")
                 }
             }
         }
