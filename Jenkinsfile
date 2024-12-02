@@ -1,6 +1,6 @@
-pipeline {
-    def app
+def app
 
+pipeline {
     agent any
 
     environment {
