@@ -12,21 +12,12 @@ pipeline {
     }
 
     stages {
-        stage("Build image") {
+        stage("Clone git repo") {
             steps {
-                script {
-                    app = docker.build("${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}")
-                }
-            }
-        }
-
-        stage("Test image") {
-            steps {
-                script {
-                    app.inside {
-                        sh 'echo "Tests passed"'
-                    }
-                }
+                git credentialsId: 'GITHUB_CREDENTIALS_ID', url: 'https://github.com/Michael2258/todolist-jenkins.git'
+                sh "ls -lart ./*"
+                sh "git branch -a"
+                sh "git checkout master"
             }
         }
     }
