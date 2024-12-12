@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage("Clone git repo") {
             steps {
-                git url: 'https://github.com/Michael2258/todolist-jenkins', branch: "master"
+                git credentialsId: 'GITHUB_CREDENTIALS_ID', url: 'https://github.com/Michael2258/todolist-jenkins', branch: "master"
             }
         }
     }
