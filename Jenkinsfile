@@ -6,6 +6,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'learn-jenkins/todo-list'
         DOCKER_IMAGE_VERSION = 'v1.0'
+        GITHUB_CREDENTIALS_ID = "GITHUB_CREDENTIALS_ID"
     }
     tools {
         nodejs "nodejs"
@@ -14,7 +15,7 @@ pipeline {
     stages {
         stage("Clone git repo") {
             steps {
-                git credentialsId: 'GITHUB_CREDENTIALS_ID', url: 'https://github.com/Michael2258/todolist-jenkins', branch: "master"
+                git credentialsId: "${GITHUB_CREDENTIALS_ID}", url: 'https://github.com/Michael2258/todolist-jenkins', branch: "master"
             }
         }
     }
