@@ -14,10 +14,7 @@ pipeline {
     stages {
         stage("Clone git repo") {
             steps {
-                git credentialsId: 'GITHUB_CREDENTIAL_KEY', url: 'https://github.com/Michael2258/todolist-jenkins'
-                sh "ls -lart ./*"
-                sh "git branch -a"
-                sh "git checkout master"
+                git url: 'https://github.com/Michael2258/todolist-jenkins', branch: "master"
             }
         }
     }
