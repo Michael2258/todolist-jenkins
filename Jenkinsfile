@@ -13,9 +13,22 @@ pipeline {
     }
 
     stages {
+        // Why? to make sure directory ownership matches current user -> secure env
+        // directory ownership: 'ls -ld'
+        // current user: 'whoami'
+        stage("Configure Git Safe Directory") {
+            steps {
+                script {
+                    sh 'git config --global --add safe.directory /var/jenkins_home/workspace/learn-jenkins-todo-list'
+                }
+            }
+        }
+
         stage("Clone git repo") {
             steps {
-                echo "Hello GITHUB ${GITHUB_CREDENTIALS_ID}"
+                git credentialsId: "${GITHUB_CREDENTIALS_ID}",
+                url: 'https://github.com/Michael2258/todolist-jenkins',
+                branch: "master"
             }
         }
     }
