@@ -7,8 +7,11 @@ pipeline {
         DOCKER_IMAGE_VERSION = 'v1.1'
         GITHUB_CREDENTIALS_ID = 'GITHUB_CREDENTIALS_ID'
         DOCKERHUB_USERNAME = 'michaelnguyen22'
-        IMAGE_NAME = 'todolist-jenkins'
+        DOCKER_IMAGE = 'todolist-jenkins'
         DOCKERHUB_CREDENTIALS_ID = 'DOCKERHUB_CREDENTIALS_ID'
+        SERVER_USER = 'root'
+        SERVER_IP = '172.18.0.3'
+        SERVER_CREDENTIALS_ID = 'SERVER_CREDENTIALS_ID'
     }
     tools {
         nodejs "nodejs"
@@ -36,7 +39,36 @@ pipeline {
 
         stage("Create Docker image") {
             steps {
-                sh 'docker build -t ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${DOCKER_IMAGE_VERSION} .'
+                sh 'docker build -t ${DOCKERHUB_USERNAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION} .'
+            }
+        }
+
+        stage("Push Docker Image to Github Registry") {
+            steps {
+                script {
+                    docker.withRegistry('https://ghcr.io', 'GITHUB_CREDENTIALS_ID') {
+                        sh 'docker tag ${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION} ${DOCKERHUB_USERNAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}'
+                        sh 'docker push ${DOCKERHUB_USERNAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}'
+                    }
+                }
+            }
+        }
+
+        stage("SSH to Server and Deploy") {
+            steps {
+                script {
+                    sshagent([SERVER_CREDENTIALS_ID]) {
+                        sh """
+                            ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} << EOF
+                            docker stop ${DOCKER_IMAGE} || true
+                            docker rm ${DOCKER_IMAGE} || true
+                            docker rmi ${DOCKER_IMAGE} || true
+                            docker rmi ${DOCKERHUB_USERNAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION} || true
+                            docker pull ${DOCKERHUB_USERNAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}
+                            docker run -d --name ${DOCKER_IMAGE} -p 8084:80 ${DOCKERHUB_USERNAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}
+                        """
+                    }
+                }
             }
         }
     }
