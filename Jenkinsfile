@@ -4,9 +4,11 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'learn-jenkins/todo-list'
-        DOCKER_IMAGE_VERSION = 'v1.0'
-        GITHUB_CREDENTIALS_ID = "GITHUB_CREDENTIALS_ID"
+        DOCKER_IMAGE_VERSION = 'v1.1'
+        GITHUB_CREDENTIALS_ID = 'GITHUB_CREDENTIALS_ID'
+        DOCKERHUB_USERNAME = 'michaelnguyen22'
+        IMAGE_NAME = 'todolist-jenkins'
+        DOCKERHUB_CREDENTIALS_ID = 'DOCKERHUB_CREDENTIALS_ID'
     }
     tools {
         nodejs "nodejs"
@@ -29,6 +31,12 @@ pipeline {
                 git credentialsId: "${GITHUB_CREDENTIALS_ID}",
                 url: 'https://github.com/Michael2258/todolist-jenkins',
                 branch: "master"
+            }
+        }
+
+        stage("Create Docker image") {
+            steps {
+                sh 'docker build -t ${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${DOCKER_IMAGE_VERSION} .'
             }
         }
     }
