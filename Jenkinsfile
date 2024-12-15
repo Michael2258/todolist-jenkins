@@ -9,6 +9,7 @@ pipeline {
         DOCKERHUB_USERNAME = 'michaelnguyen22'
         DOCKER_IMAGE = 'todolist-jenkins'
         DOCKERHUB_CREDENTIALS_ID = 'DOCKERHUB_CREDENTIALS_ID'
+        GITHUB_NAME = 'Michael2258'
         SERVER_USER = 'root'
         SERVER_IP = '172.18.0.3'
         SERVER_CREDENTIALS_ID = 'SERVER_CREDENTIALS_ID'
@@ -48,7 +49,7 @@ pipeline {
                 script {
                     docker.withRegistry('https://ghcr.io', 'GITHUB_CREDENTIALS_ID') {
                         sh 'docker tag ${DOCKERHUB_USERNAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION} ghcr.io/${DOCKERHUB_USERNAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}'
-                        sh 'docker push ghcr.io/${DOCKERHUB_USERNAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}'
+                        sh 'docker push ghcr.io/{Michael2258}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}'
                     }
                 }
             }
