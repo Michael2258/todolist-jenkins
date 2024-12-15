@@ -65,8 +65,8 @@ pipeline {
                             docker rm ${DOCKER_IMAGE} || true
                             docker rmi ${DOCKER_IMAGE} || true
                             docker rmi ${DOCKERHUB_USERNAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION} || true
-                            docker pull ${DOCKERHUB_USERNAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}
-                            docker run -d --name ${DOCKER_IMAGE} -p 8084:80 ${DOCKERHUB_USERNAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}
+                            docker pull ghcr.io/${GHCR_REPO_NAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}
+                            docker run -d --name ${DOCKER_IMAGE} -p 8084:80 ghcr.io/${GHCR_REPO_NAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}
                         """
                     }
                 }
