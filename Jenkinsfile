@@ -48,8 +48,8 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://ghcr.io', 'GITHUB_CREDENTIALS_ID') {
-                        sh 'docker tag ${DOCKERHUB_USERNAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION} ghcr.io/${{ github.repository_owner }}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}'
-                        sh 'docker push ghcr.io/$${{ github.repository_owner }}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}'
+                        sh 'docker tag ${DOCKERHUB_USERNAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION} ghcr.io/${GHCR_REPO_NAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}'
+                        sh 'docker push ghcr.io/${GHCR_REPO_NAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}'
                     }
                 }
             }
