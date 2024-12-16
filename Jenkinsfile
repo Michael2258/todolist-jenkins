@@ -66,7 +66,7 @@ pipeline {
                             docker stop ${DOCKER_IMAGE} || true
                             docker rm ${DOCKER_IMAGE} || true
                             docker rmi ghcr.io/${GHCR_REPO_NAME}/${DOCKER_IMAGE} || true
-                            docker image prune
+                            docker image prune -y
                             docker pull ghcr.io/${GHCR_REPO_NAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}
                             docker run -d --name ${DOCKER_IMAGE} -p 8084:80 ghcr.io/${GHCR_REPO_NAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}
                         """
