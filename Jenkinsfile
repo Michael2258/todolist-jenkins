@@ -40,7 +40,7 @@ pipeline {
 
         stage("Create Docker image") {
             steps {
-                sh 'docker build -t ${DOCKERHUB_USERNAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION} .'
+                sh 'docker build -t ${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION} .'
             }
         }
 
@@ -48,7 +48,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://ghcr.io', 'GITHUB_CREDENTIALS_ID') {
-                        sh 'docker tag ${DOCKERHUB_USERNAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION} ghcr.io/${GHCR_REPO_NAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}'
+                        sh 'docker tag ${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION} ghcr.io/${GHCR_REPO_NAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}'
                         sh 'docker push ghcr.io/${GHCR_REPO_NAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}'
                     }
                 }
@@ -64,8 +64,7 @@ pipeline {
                             docker stop ${DOCKER_IMAGE} || true
                             docker rm ${DOCKER_IMAGE} || true
                             docker rmi ${DOCKER_IMAGE} || true
-                            docker rmi ${DOCKERHUB_USERNAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION} || true
-                            docker login ghcr.io -u ${GHCR_REPO_NAME} -p ${GITHUB_CREDENTIALS_ID}
+                            docker rmi ${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION} || true
                             docker pull ghcr.io/${GHCR_REPO_NAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}
                             docker run -d --name ${DOCKER_IMAGE} -p 8084:80 ghcr.io/${GHCR_REPO_NAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}
                         """
