@@ -4,7 +4,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE_VERSION = 'v1.1'
+        DOCKER_IMAGE_VERSION = 'v1.2'
         GITHUB_CREDENTIALS_ID = 'GITHUB_CREDENTIALS_ID'
         DOCKERHUB_USERNAME = 'michaelnguyen22'
         DOCKER_IMAGE = 'todolist-jenkins'
@@ -63,8 +63,7 @@ pipeline {
                             ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} << EOF
                             docker stop ${DOCKER_IMAGE} || true
                             docker rm ${DOCKER_IMAGE} || true
-                            docker rmi ${DOCKER_IMAGE} || true
-                            docker rmi ${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION} || true
+                            docker rmi ghcr.io/${GHCR_REPO_NAME}/${DOCKER_IMAGE} || true
                             docker pull ghcr.io/${GHCR_REPO_NAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}
                             docker run -d --name ${DOCKER_IMAGE} -p 8084:80 ghcr.io/${GHCR_REPO_NAME}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}
                         """
